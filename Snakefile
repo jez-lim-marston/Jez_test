@@ -53,12 +53,12 @@ rm {input[3]}
         '''               
 
 localrules: star_complete_allen
-rule star_complete:
+rule star_complete_allen:
     input:
         expand("results/complete/{s}_star_align.txt", s=allen_SAMPLES)
 
 localrules: star_complete_hugo
-rule star_complete:
+rule star_complete_hugo:
     input:
         expand("results/complete/{s}_star_align.txt", s=hugo_SAMPLES)
 
