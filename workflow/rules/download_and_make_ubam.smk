@@ -6,34 +6,15 @@ import csv
 import pandas as pd
 
 #download the unaligned bams
-rule get_bams:
-    conda: "../envs/dump.yaml"
-    params:
-        SRR = lambda wc: allen_readtable.loc[wc.sample_id][config['allen_sample_id']],
-        ngc = config['ngc_file'],
-    output: 
-        org = temp("runs/{sample_id}.org.bam")
-    wildcard_constraints:
-        sample_id = "(SRR)[0-9]+"
-    resources:
-        mem_mb = config['fastq_mem_mb']
-    shell:
-        '''
-mkdir -p runs/{wildcards.sample_id}
-prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
-sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
-        '''
-
-# get bams for hugo samples
 #rule get_bams:
 #    conda: "../envs/dump.yaml"
 #    params:
-#        SRR = lambda wc: hugo_readtable.loc[wc.sample_id][config['hugo_sample_id']],
+#        SRR = lambda wc: allen_readtable.loc[wc.sample_id][config['allen_sample_id']],
 #        ngc = config['ngc_file'],
 #    output: 
-#        org = "runs/{sample_id}.org.bam"
+#        org = temp("runs/{sample_id}.org.bam")
 #    wildcard_constraints:
-#        sample_id = '(SRR).+'
+#        sample_id = "(SRR)[0-9]+"
 #    resources:
 #        mem_mb = config['fastq_mem_mb']
 #    shell:
@@ -42,6 +23,25 @@ sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --
 #prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
 #sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
 #        '''
+
+# get bams for hugo samples
+rule get_bams:
+    conda: "../envs/dump.yaml"
+    params:
+        SRR = lambda wc: hugo_readtable.loc[wc.sample_id][config['hugo_sample_id']],
+        ngc = config['ngc_file'],
+    output: 
+        org = "runs/{sample_id}.org.bam"
+    wildcard_constraints:
+        sample_id = '(SRR).+'
+    resources:
+        mem_mb = config['fastq_mem_mb']
+    shell:
+        '''
+mkdir -p runs/{wildcards.sample_id}
+prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
+sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
+        '''
 
 # Default SAM attributes cleared by RevertSam
 attr_revertsam = ['NM', 'UQ', 'PG', 'MD', 'MQ', 'SA', 'MC', 'AS']
