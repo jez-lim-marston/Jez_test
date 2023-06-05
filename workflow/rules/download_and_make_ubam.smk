@@ -33,7 +33,7 @@ rule get_bams:
     output: 
         org = "runs/{sample_id}.org.bam"
     wildcard_constraints:
-        sample_id = '(SRR).+'
+        sample_id = "(SRR)[0-9]+"
     resources:
         mem_mb = config['fastq_mem_mb']
     shell:
@@ -75,10 +75,10 @@ picard RevertSam\
 chmod 600 {output[0]}
         '''
 
-localrules: make_allen_ubams
-rule make_allen_ubams:
-    input:
-        expand("results/ubam/{sample_id}.bam", sample_id=allen_SAMPLES)
+#localrules: make_allen_ubams
+#rule make_allen_ubams:
+#    input:
+#        expand("results/ubam/{sample_id}.bam", sample_id=allen_SAMPLES)
 
 localrules: make_hugo_ubams
 rule make_hugo_ubams:

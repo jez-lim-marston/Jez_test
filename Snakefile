@@ -18,7 +18,7 @@ allen_readtable.set_index(config['allen_sample_id'], inplace = True, drop = Fals
 """ Hugo samples """
 hugo_readtable = pd.read_csv(config['hugo_metadata'], header = 0)
 hugo_readtable.set_index(config['hugo_SRR'], inplace = True, drop = False)
-hugo_SAMPLES = allen_readtable[config['hugo_sample_id']].unique().tolist()
+hugo_SAMPLES = hugo_readtable[config['hugo_sample_id']].unique().tolist()
 hugo_readtable.set_index(config['hugo_sample_id'], inplace = True, drop = False)
 
 include: "workflow/rules/download_and_make_ubam.smk"
