@@ -14,7 +14,7 @@ rule get_bams:
     output: 
         org = temp("runs/{sample_id}.org.bam")
     wildcard_constraints:
-        sample_id = '(SRR).+'
+        sample_id = "(SRR)[0-9]+"
     resources:
         mem_mb = config['fastq_mem_mb']
     shell:
@@ -53,11 +53,11 @@ ALN_ATTRIBUTES = list(set(attr_star) - set(attr_revertsam))
 #Create unmapped BAM (uBAM) from aligned BAM
 rule revert_and_mark_adapters:
     input:
-        "results/original_bam/{sample_id}.bam"
+        "runs/{sample_id}.org.bam"
     output:
         "results/ubam/{sample_id}.bam"
     wildcard_constraints:
-        sample_id = "(SRR).+"
+        sample_id = "(SRR)[0-9]+"
     conda:
         "../envs/utils.yaml"
     params:
