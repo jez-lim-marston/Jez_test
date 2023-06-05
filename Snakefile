@@ -21,11 +21,11 @@ hugo_readtable.set_index(config['hugo_SRR'], inplace = True, drop = False)
 hugo_SAMPLES = allen_readtable[config['hugo_sample_id']].unique().tolist()
 hugo_readtable.set_index(config['hugo_sample_id'], inplace = True, drop = False)
 
-include: "rules/download_and_make_ubam.smk"
-include: "rules/align_star.smk"
-include: "rules/sort_cram.smk"
-include: "rules/telescope.smk"
-include: "rules/stringtie.smk"
+include: "workflow/rules/download_and_make_ubam.smk"
+include: "workflow/rules/align_star.smk"
+include: "workflow/rules/sort_cram.smk"
+include: "workflow/rules/telescope.smk"
+include: "workflow/rules/stringtie.smk"
 
 localrules: allen_sample_download
 rule sample_download:
