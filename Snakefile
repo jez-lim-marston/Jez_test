@@ -12,13 +12,13 @@ configfile: "config/config.yaml"
 """ Allen samples """
 allen_readtable = pd.read_csv(config['allen_metadata'], header = 0)
 allen_readtable.set_index(config['allen_SRR'], inplace = True, drop = False)
-allen_SAMPLES = METADATA[config['allen_sample_id']].unique().tolist()
+allen_SAMPLES = allen_readtable[config['allen_sample_id']].unique().tolist()
 allen_readtable.set_index(config['allen_sample_id'], inplace = True, drop = False)
 
 """ Hugo samples """
 hugo_readtable = pd.read_csv(config['hugo_metadata'], header = 0)
 hugo_readtable.set_index(config['hugo_SRR'], inplace = True, drop = False)
-hugo_SAMPLES = METADATA[config['hugo_sample_id']].unique().tolist()
+hugo_SAMPLES = allen_readtable[config['hugo_sample_id']].unique().tolist()
 hugo_readtable.set_index(config['hugo_sample_id'], inplace = True, drop = False)
 
 include: "rules/download_and_make_ubam.smk"
