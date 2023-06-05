@@ -1,0 +1,7 @@
+name: telescope
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - telescope ==1.0.3
