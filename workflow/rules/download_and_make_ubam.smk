@@ -12,7 +12,7 @@ rule get_bams:
         SRR = lambda wc: allen_readtable.loc[wc.sample_id][config['allen_sample_id']],
         ngc = config['ngc_file'],
     output: 
-        org = "runs/{sample_id}.org.bam"
+        org = temp("runs/{sample_id}.org.bam")
     wildcard_constraints:
         sample_id = '(SRR).+'
     resources:
