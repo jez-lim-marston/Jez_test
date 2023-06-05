@@ -24,26 +24,24 @@ prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 999999
 sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
         '''
 
-""""
 # get bams for hugo samples
-rule get_bams:
-    conda: "../envs/dump.yaml"
-    params:
-        SRR = lambda wc: hugo_readtable.loc[wc.sample_id][config['hugo_sample_id']],
-        ngc = config['ngc_file'],
-    output: 
-        org = "runs/{sample_id}.org.bam"
-    wildcard_constraints:
-        sample_id = '(SRR).+'
-    resources:
-        mem_mb = config['fastq_mem_mb']
-    shell:
-        '''
-mkdir -p runs/{wildcards.sample_id}
-prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
-sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
-        '''
-""""
+#rule get_bams:
+#    conda: "../envs/dump.yaml"
+#    params:
+#        SRR = lambda wc: hugo_readtable.loc[wc.sample_id][config['hugo_sample_id']],
+#        ngc = config['ngc_file'],
+#    output: 
+#        org = "runs/{sample_id}.org.bam"
+#    wildcard_constraints:
+#        sample_id = '(SRR).+'
+#    resources:
+#        mem_mb = config['fastq_mem_mb']
+#    shell:
+#        '''
+#mkdir -p runs/{wildcards.sample_id}
+#prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
+#sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
+#        '''
 
 # Default SAM attributes cleared by RevertSam
 attr_revertsam = ['NM', 'UQ', 'PG', 'MD', 'MQ', 'SA', 'MC', 'AS']
@@ -59,7 +57,7 @@ rule revert_and_mark_adapters:
     output:
         "results/ubam/{sample_id}.bam"
     wildcard_constraints:
-        sample_id = "TCGA\\-..\\-[A-Z]...\\-..[A-Z]"
+        sample_id = "(SRR).+"
     conda:
         "../envs/utils.yaml"
     params:
