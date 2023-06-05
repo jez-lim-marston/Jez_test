@@ -30,7 +30,7 @@ Bulk RNA-Seq Telescope analysis of 2 metastatic melanoma datasets. Input the met
 
 ## To modify pipeline:
 
-Change sample download table and method. This pipeline uses ```fastq-dump``` to download files.
+Change sample download table and method. This pipeline uses ```prefetch```then```fastq-dump``` to download files.
 
 
 ## Usage

@@ -5,29 +5,45 @@ import os
 import csv
 import pandas as pd
 
-def pref_command(wc):
-    SRR = METADATA.loc[wc.umid][config['SOURCE']]
-    return SRR
-
-#The files were submitted as bam files.
-#The are unorganized - the header should be containing CB/UB information
-rule get_sams:
-    conda: "../envs/fastq.yaml"
+#download the unaligned bams
+rule get_bams:
+    conda: "../envs/dump.yaml"
     params:
-        cmd = pref_command,
+        SRR = lambda wc: allen_readtable.loc[wc.sample_id][config['allen_sample_id']],
         ngc = config['ngc_file'],
     output: 
-        org = "runs/{umid}.org.bam"
+        org = "runs/{sample_id}.org.bam"
     wildcard_constraints:
-        umid = '(UMM|BSSR).+'
+        sample_id = '(SRR).+'
     resources:
         mem_mb = config['fastq_mem_mb']
     shell:
         '''
-mkdir -p runs/{wildcards.umid}
-prefetch {params.cmd} --ngc {params.ngc} -O runs/{wildcards.umid} -X 9999999999999
-sam-dump --unaligned runs/{wildcards.umid}/{params.cmd}/{params.cmd}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
+mkdir -p runs/{wildcards.sample_id}
+prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
+sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
         '''
+
+""""
+# get bams for hugo samples
+rule get_bams:
+    conda: "../envs/dump.yaml"
+    params:
+        SRR = lambda wc: hugo_readtable.loc[wc.sample_id][config['hugo_sample_id']],
+        ngc = config['ngc_file'],
+    output: 
+        org = "runs/{sample_id}.org.bam"
+    wildcard_constraints:
+        sample_id = '(SRR).+'
+    resources:
+        mem_mb = config['fastq_mem_mb']
+    shell:
+        '''
+mkdir -p runs/{wildcards.sample_id}
+prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
+sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
+        '''
+""""
 
 # Default SAM attributes cleared by RevertSam
 attr_revertsam = ['NM', 'UQ', 'PG', 'MD', 'MQ', 'SA', 'MC', 'AS']
@@ -36,9 +52,8 @@ attr_star = ['NH', 'HI', 'NM', 'MD', 'AS', 'nM', 'jM', 'jI', 'XS', 'uT']
 # Additional attributes to clear
 ALN_ATTRIBUTES = list(set(attr_star) - set(attr_revertsam))
 
+#Create unmapped BAM (uBAM) from aligned BAM
 rule revert_and_mark_adapters:
-    """ Create unmapped BAM (uBAM) from aligned BAM
-    """
     input:
         "results/original_bam/{sample_id}.bam"
     output:
@@ -49,7 +64,7 @@ rule revert_and_mark_adapters:
         "../envs/utils.yaml"
     params:
         attr_to_clear = expand("--ATTRIBUTE_TO_CLEAR {a}", a=ALN_ATTRIBUTES),
-        tmpdir = config['tmp']
+        tmpdir = config['tmpdir']
     shell:
         '''
 picard RevertSam\
@@ -62,7 +77,12 @@ picard RevertSam\
 chmod 600 {output[0]}
         '''
 
-localrules: make_tcga_ubams
-rule make_tcga_ubams:
+localrules: make_allen_ubams
+rule make_allen_ubams:
     input:
-        expand("results/ubam/{sample_id}.bam", sample_id=tcga_samples)
+        expand("results/ubam/{sample_id}.bam", sample_id=allen_SAMPLES)
+
+localrules: make_hugo_ubams
+rule make_hugo_ubams:
+    input:
+        expand("results/ubam/{sample_id}.bam", sample_id=hugo_SAMPLES)

@@ -1,7 +1,11 @@
-tcga_metadata: "resources/METADATA.csv"
-tcga_file_id: "File.ID"
-tcga_sample_id: "Sample.ID"
-GDC_token: "/home/tof4003/gdc_token_fei.txt"
+allen_metadata: "resources/van_allen_METADATA.csv"
+allen_SRR: "Run"
+allen_sample_id: "Run"
+hugo_metadata: "resources/hugo_METADATA.csv"
+hugo_SRR: "Run"
+hugo_sample_id: "Run"
+ngc_file: "/home/tof4003/ngckey.ngc"
+tmpdir: "/athena/nixonlab/scratch/tof4003/Mets_CM_bulk_tmp"
 star_align_multi:
     genomeDir: "resources/STAR_gdc38_gencode38"
     outFilterMultimapNmax: 200
