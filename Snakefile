@@ -65,7 +65,6 @@ rule star_complete:
 localrules: sample_complete
 rule sample_complete:
     input:
-        "results/align_multi/{sample_id}/Aligned.sortedByCoord.out.bam",
         "results/align_multi/{sample_id}/Aligned.out.bam",
         rules.telescope.output,
         rules.stringtie.output
@@ -74,7 +73,6 @@ rule sample_complete:
     shell:
         '''
 rm {input[0]}
-rm {input[1]}
         '''      
 
 localrules: allen_all_complete
