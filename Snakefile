@@ -28,12 +28,12 @@ include: "workflow/rules/telescope.smk"
 include: "workflow/rules/stringtie.smk"
 
 localrules: allen_sample_download
-rule sample_download:
+rule allen_sample_download:
     input:
         expand("results/ubam/{sample_id}.bam", sample_id=allen_SAMPLES)
 
 localrules: hugo_sample_download
-rule sample_download:
+rule hugo_sample_download:
     input:
         expand("results/ubam/{sample_id}.bam", sample_id=hugo_SAMPLES)
 
