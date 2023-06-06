@@ -45,15 +45,13 @@ rule star_align:
         "results/align_multi/{sample_id}/ReadsPerGene.out.tab",
         "results/align_multi/{sample_id}/Aligned.sortedByCoord.out.cram",
         "runs/{sample_id}_1.fastq.gz",
-        "runs/{sample_id}_2.fastq.gz",
-        "runs/{sample_id}/{s}/{s}.sra"
+        "runs/{sample_id}_2.fastq.gz"
     output:
         touch("results/complete/{sample_id}_star_align.txt")
     shell:
         '''
 rm {input[3]}
 rm {input[4]}
-rm {input[5]}
         '''               
 
 localrules: star_complete_allen
