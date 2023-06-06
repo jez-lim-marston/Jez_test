@@ -41,7 +41,7 @@ rule get_bams:
         '''
 mkdir -p runs/{wildcards.sample_id}
 prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
-fastq-dump --gzip --split-3 -O runs --ngc {params.ngc} runs/{sample_id}/{params.SRR}/{params.SRR}.sra
+fastq-dump --gzip --split-3 -O runs --ngc {params.ngc} runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra
         '''
 
 #localrules: allen_fastq
