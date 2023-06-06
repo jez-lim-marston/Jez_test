@@ -3,7 +3,8 @@
 
 rule star_align_multi:
     input:
-        ubam = 'results/ubam/{sample_id}.bam',
+        read_1 = 'runs/{sample_id}_1.fastq.gz',
+        read_2 = 'runs/{sample_id}_2.fastq.gz',
         genomeDir = config['star_align_multi']['genomeDir']
     output:
         "results/align_multi/{sample_id}/Aligned.out.bam",
@@ -17,18 +18,11 @@ rule star_align_multi:
         '''
 tdir=$(mktemp -d {config[tmpdir]}/{rule}.{wildcards.sample_id}.XXXXXX)
 
-picard SamToFastq\
-  -I {input.ubam}\
-  -F $tdir/R1.fq\
-  -F2 $tdir/R2.fq\
-  --CLIPPING_ATTRIBUTE XT\
-  --CLIPPING_ACTION N\
-  -NON_PF true     
-
 STAR\
   --runThreadN {threads}\
   --genomeDir {input.genomeDir}\
-  --readFilesIn $tdir/R1.fq $tdir/R2.fq\
+  --readFilesIn {input.read_1} {input.read_2}\
+  --readFilesCommand zcat\
   --outSAMattributes NH HI NM MD AS XS\
   --outSAMtype BAM Unsorted\
   --outFileNamePrefix $(dirname {output[0]})/\
