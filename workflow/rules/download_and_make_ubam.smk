@@ -24,7 +24,7 @@ import pandas as pd
 #sam-dump --unaligned runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra --ngc {params.ngc} | samtools view -bS > {output.org}
 #        '''
 
-# get bams for hugo samples, all reads are paired
+# get fastq for hugo samples, all reads are paired
 rule get_bams:
     conda: "../envs/dump.yaml"
     params:
@@ -32,7 +32,8 @@ rule get_bams:
         ngc = config['ngc_file'],
     output: 
         read_1 = "runs/{sample_id}_1.fastq.gz",
-        read_2 = "runs/{sample_id}_2.fastq.gz"
+        read_2 = "runs/{sample_id}_2.fastq.gz",
+        sra = temp("runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra ")
     wildcard_constraints:
         sample_id = "(SRR)[0-9]+"
     resources:
