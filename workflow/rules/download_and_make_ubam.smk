@@ -30,8 +30,7 @@ rule get_bams:
     params:
         SRR = lambda wc: hugo_readtable.loc[wc.sample_id][config['hugo_sample_id']],
         ngc = config['ngc_file'],
-    output: 
-        sra = temp("runs/{sample_id}/{params.SRR}/{params.SRR}.sra"),
+    output:
         read_1 = "runs/{sample_id}_1.fastq.gz",
         read_2 = "runs/{sample_id}_2.fastq.gz"
     wildcard_constraints:
@@ -42,7 +41,7 @@ rule get_bams:
         '''
 mkdir -p runs/{wildcards.sample_id}
 prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
-fastq-dump --gzip --split-3 -O runs --ngc {params.ngc} {output.sra}
+fastq-dump --gzip --split-3 -O runs --ngc {params.ngc} runs/{sample_id}/{params.SRR}/{params.SRR}.sra
         '''
 
 #localrules: allen_fastq
