@@ -80,7 +80,7 @@ rule allen_bam:
 #prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
 #fastq-dump --gzip --split-3 -O runs --ngc {params.ngc} runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra
 #        '''
-
+#
 #localrules: hugo_fastq
 #rule hugo_fastq:
 #    input:
