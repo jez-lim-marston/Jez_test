@@ -11,8 +11,8 @@ rule get_bams:
     params:
         SRR = lambda wc: allen_readtable.loc[wc.sample_id][config['allen_sample_id']],
         ngc = config['ngc_file']
-    output: 
-        org = temp("runs/{sample_id}.org.bam")
+    output:
+        org = "runs/{sample_id}.org.bam"
     wildcard_constraints:
         sample_id = "(SRR)[0-9]+"
     resources:
@@ -43,7 +43,7 @@ rule revert_and_mark_adapters:
         "../envs/utils.yaml"
     params:
         attr_to_clear = expand("--ATTRIBUTE_TO_CLEAR {a}", a=ALN_ATTRIBUTES),
-        tmpdir = config['tmp']
+        tmpdir = config['tmpdir']
     shell:
         '''
 picard RevertSam\
@@ -66,7 +66,7 @@ rule allen_bam:
 #    conda: "../envs/dump.yaml"
 #    params:
 #        SRR = lambda wc: hugo_readtable.loc[wc.sample_id][config['hugo_sample_id']],
-#        ngc = config['ngc_file'],
+#        ngc = config['ngc_file']
 #    output:
 #        read_1 = "runs/{sample_id}_1.fastq.gz",
 #        read_2 = "runs/{sample_id}_2.fastq.gz"

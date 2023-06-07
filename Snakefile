@@ -44,12 +44,14 @@ rule star_align:
         "results/align_multi/{sample_id}/Aligned.out.bam",
         "results/align_multi/{sample_id}/ReadsPerGene.out.tab",
         "results/align_multi/{sample_id}/Aligned.sortedByCoord.out.cram",
-        "results/ubam/{sample_id}.bam"
+        "results/ubam/{sample_id}.bam",
+        "runs/{sample_id}.org.bam"
     output:
         touch("results/complete/{sample_id}_star_align.txt")
     shell:
         '''
 rm {input[3]}
+rm {input[4]}
         '''               
 ## Or fastq in hugo's case
 #localrules: star_align
