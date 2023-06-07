@@ -10,7 +10,7 @@ rule get_bams:
     conda: "../envs/dump.yaml"
     params:
         SRR = lambda wc: allen_readtable.loc[wc.sample_id][config['allen_sample_id']],
-        ngc = config['ngc_file'],
+        ngc = config['ngc_file']
     output: 
         org = temp("runs/{sample_id}.org.bam")
     wildcard_constraints:
