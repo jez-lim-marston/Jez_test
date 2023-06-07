@@ -37,22 +37,36 @@ rule hugo_sample_download:
     input:
         expand("runs/{sample_id}_2.fastq.gz", sample_id=hugo_SAMPLES)
 
-## when job completed, remove the ubam to save space
+## when job completed, remove the ubam to save 
 localrules: star_align
 rule star_align:
     input:
         "results/align_multi/{sample_id}/Aligned.out.bam",
         "results/align_multi/{sample_id}/ReadsPerGene.out.tab",
         "results/align_multi/{sample_id}/Aligned.sortedByCoord.out.cram",
-        "runs/{sample_id}_1.fastq.gz",
-        "runs/{sample_id}_2.fastq.gz"
+        "results/ubam/{sample_id}.bam"
     output:
         touch("results/complete/{sample_id}_star_align.txt")
     shell:
         '''
 rm {input[3]}
-rm {input[4]}
         '''               
+## Or fastq in hugo's case
+#localrules: star_align
+#rule star_align:
+#    input:
+#        "results/align_multi/{sample_id}/Aligned.out.bam",
+#        "results/align_multi/{sample_id}/ReadsPerGene.out.tab",
+#        "results/align_multi/{sample_id}/Aligned.sortedByCoord.out.cram",
+#        "runs/{sample_id}_1.fastq.gz",
+#        "runs/{sample_id}_2.fastq.gz"
+#    output:
+#        touch("results/complete/{sample_id}_star_align.txt")
+#    shell:
+#        '''
+#rm {input[3]}
+#rm {input[4]}
+#        '''               
 
 localrules: star_complete_allen
 rule star_complete_allen:
