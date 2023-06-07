@@ -31,9 +31,8 @@ attr_star = ['NH', 'HI', 'NM', 'MD', 'AS', 'nM', 'jM', 'jI', 'XS', 'uT']
 # Additional attributes to clear
 ALN_ATTRIBUTES = list(set(attr_star) - set(attr_revertsam))
 
+##Create unmapped BAM (uBAM) from aligned BAM
 rule revert_and_mark_adapters:
-    """ Create unmapped BAM (uBAM) from aligned BAM
-    """
     input:
         "runs/{sample_id}.org.bam"
     output:
