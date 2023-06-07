@@ -46,13 +46,7 @@ rule revert_and_mark_adapters:
         tmpdir = config['tmpdir']
     shell:
         '''
-picard RevertSam\
- -I {input[0]}\
- -O {output[0]}\
- --SANITIZE true\
- --COMPRESSION_LEVEL 0\
- {params.attr_to_clear}\
- --TMP_DIR {params.tmpdir}
+picard RevertSam -I {input[0]} -O {output[0]} --SANITIZE true --COMPRESSION_LEVEL 0 {params.attr_to_clear} --TMP_DIR {params.tmpdir}
 chmod 600 {output[0]}
         '''
 
