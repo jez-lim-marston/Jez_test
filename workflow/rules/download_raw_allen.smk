@@ -34,7 +34,7 @@ rule revert_and_mark_adapters:
     """ Create unmapped BAM (uBAM) from aligned BAM
     """
     input:
-        "results/original_bam/{sample_id}.bam"
+        "runs/{sample_id}.org.bam"
     output:
         "results/ubam/{sample_id}.bam"
     wildcard_constraints:
