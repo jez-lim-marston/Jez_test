@@ -39,7 +39,7 @@ rule revert_and_mark_adapters:
     output:
         "results/ubam/{sample_id}.bam"
     wildcard_constraints:
-        sample_id = "TCGA\\-..\\-[A-Z]...\\-..[A-Z]"
+        sample_id = "(SRR)[0-9]+"
     conda:
         "../envs/utils.yaml"
     params:
@@ -56,6 +56,11 @@ picard RevertSam\
  --TMP_DIR {params.tmpdir}
 chmod 600 {output[0]}
         '''
+
+localrules: allen_bam
+rule allen_bam:
+    input:
+        expand("results/ubam/{sample_id}.bam", sample_id=allen_SAMPLES)
 
 # get fastq for hugo samples, all reads are paired
 #rule get_bams:
@@ -76,11 +81,6 @@ chmod 600 {output[0]}
 #prefetch {params.SRR} --ngc {params.ngc} -O runs/{wildcards.sample_id} -X 9999999999999
 #fastq-dump --gzip --split-3 -O runs --ngc {params.ngc} runs/{wildcards.sample_id}/{params.SRR}/{params.SRR}.sra
 #        '''
-
-localrules: allen_fastq
-rule allen_fastq:
-    input:
-        expand("runs/{sample_id}_2.fastq.gz", sample_id=allen_SAMPLES)
 
 #localrules: hugo_fastq
 #rule hugo_fastq:

@@ -30,7 +30,7 @@ include: "workflow/rules/stringtie.smk"
 localrules: allen_sample_download
 rule allen_sample_download:
     input:
-        expand("runs/{sample_id}_2.fastq.gz", sample_id=allen_SAMPLES)
+        expand("results/ubam/{sample_id}.bam", sample_id=allen_SAMPLES)
 
 localrules: hugo_sample_download
 rule hugo_sample_download:
