@@ -1,6 +1,6 @@
 # Snakemake workflow
 
-## Title: Comparing HERV Expression Between Responder and Non-responder to Immunotherapy in Metastatic Melanoma
+## Title: Jez cloning test
 
 Bulk RNA-Seq Telescope analysis of 2 metastatic melanoma datasets. Input the metadata table that include the accessions needed to download the raw sequencing files, output gene/HERV count matrices.
 
